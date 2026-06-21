@@ -4,10 +4,13 @@ export interface LevelboxConfig {
   supabaseAnonKey: string;
 }
 
+// The Supabase project URL + anon ("publishable") key are PUBLIC by design — the same values ship
+// in the levelbox.ai web app's browser bundle. They are safe to commit here; the /mcp server is
+// protected by JWT verification + RLS, not by hiding these. Override via flags/env if needed.
 const DEFAULTS: LevelboxConfig = {
   baseUrl: "https://api.levelbox.ai/mcp",
-  supabaseUrl: "", // filled with the web app's NEXT_PUBLIC_SUPABASE_URL
-  supabaseAnonKey: "", // filled with NEXT_PUBLIC_SUPABASE_ANON_KEY
+  supabaseUrl: "https://gmrkfqscgbxapaljfqve.supabase.co",
+  supabaseAnonKey: "sb_publishable__GLbOg-CpEqLuxtmlPab9g_wnE0IH_0",
 };
 
 export function resolveConfig(flags: Partial<LevelboxConfig> = {}): LevelboxConfig {
