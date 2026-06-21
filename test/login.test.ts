@@ -1,0 +1,32 @@
+import { describe, it, expect, vi } from "vitest";
+
+vi.mock("../src/auth/store.js", () => {
+  return {
+    writeCreds: vi.fn(),
+  };
+});
+
+import { loginWithToken } from "../src/auth/login.js";
+import * as store from "../src/auth/store.js";
+
+const cfg = { baseUrl: "x", supabaseUrl: "https://s.supabase.co", supabaseAnonKey: "anon" };
+
+describe("login", () => {
+  it("validates a pasted token via refresh and stores creds", async () => {
+    global.fetch = vi.fn(
+      async () =>
+        new Response(JSON.stringify({ access_token: "A", refresh_token: "R2", expires_at: 9999 }), {
+          status: 200,
+        }),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ) as any;
+    await loginWithToken(cfg, "ignored", "R1");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(store.writeCreds as any).toHaveBeenCalledWith({
+      accessToken: "A",
+      refreshToken: "R2",
+      expiresAt: 9999,
+      supabaseUrl: "https://s.supabase.co",
+    });
+  });
+});
