@@ -6,7 +6,7 @@ vi.mock("../src/auth/store.js", () => {
   };
 });
 
-import { loginWithToken } from "../src/auth/login.js";
+import { loginWithToken, handleCallbackBody } from "../src/auth/login.js";
 import * as store from "../src/auth/store.js";
 
 const cfg = { baseUrl: "x", supabaseUrl: "https://s.supabase.co", supabaseAnonKey: "anon" };
@@ -26,6 +26,19 @@ describe("login", () => {
       accessToken: "A",
       refreshToken: "R2",
       expiresAt: 9999,
+      supabaseUrl: "https://s.supabase.co",
+    });
+  });
+
+  it("maps a posted supabase session to creds", () => {
+    const c = handleCallbackBody(
+      { baseUrl: "x", supabaseUrl: "https://s.supabase.co", supabaseAnonKey: "a" },
+      { access_token: "A", refresh_token: "R", expires_at: 4242 },
+    );
+    expect(c).toEqual({
+      accessToken: "A",
+      refreshToken: "R",
+      expiresAt: 4242,
       supabaseUrl: "https://s.supabase.co",
     });
   });
