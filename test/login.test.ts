@@ -6,10 +6,52 @@ vi.mock("../src/auth/store.js", () => {
   };
 });
 
-import { loginWithToken, handleCallbackBody } from "../src/auth/login.js";
+import { loginWithToken, handleCallbackBody, requireSupabaseConfig } from "../src/auth/login.js";
 import * as store from "../src/auth/store.js";
 
 const cfg = { baseUrl: "x", supabaseUrl: "https://s.supabase.co", supabaseAnonKey: "anon" };
+
+describe("requireSupabaseConfig", () => {
+  it("throws a clear error when supabaseUrl is empty", () => {
+    expect(() =>
+      requireSupabaseConfig({ baseUrl: "x", supabaseUrl: "", supabaseAnonKey: "anon" }),
+    ).toThrow(
+      "supabase not configured — set LEVELBOX_SUPABASE_URL and LEVELBOX_SUPABASE_ANON_KEY (or pass --supabase-url / --supabase-anon-key)",
+    );
+  });
+
+  it("throws a clear error when supabaseAnonKey is empty", () => {
+    expect(() =>
+      requireSupabaseConfig({
+        baseUrl: "x",
+        supabaseUrl: "https://s.supabase.co",
+        supabaseAnonKey: "",
+      }),
+    ).toThrow(
+      "supabase not configured — set LEVELBOX_SUPABASE_URL and LEVELBOX_SUPABASE_ANON_KEY (or pass --supabase-url / --supabase-anon-key)",
+    );
+  });
+
+  it("does not throw when both values are present", () => {
+    expect(() =>
+      requireSupabaseConfig({
+        baseUrl: "x",
+        supabaseUrl: "https://s.supabase.co",
+        supabaseAnonKey: "anon",
+      }),
+    ).not.toThrow();
+  });
+});
+
+describe("loginWithToken guard", () => {
+  it("throws the config error before hitting the network when supabaseUrl is empty", async () => {
+    await expect(
+      loginWithToken({ baseUrl: "x", supabaseUrl: "", supabaseAnonKey: "anon" }, "tok", "rtok"),
+    ).rejects.toThrow(
+      "supabase not configured — set LEVELBOX_SUPABASE_URL and LEVELBOX_SUPABASE_ANON_KEY (or pass --supabase-url / --supabase-anon-key)",
+    );
+  });
+});
 
 describe("login", () => {
   it("validates a pasted token via refresh and stores creds", async () => {

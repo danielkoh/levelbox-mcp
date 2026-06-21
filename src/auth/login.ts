@@ -5,6 +5,18 @@ import type { Creds } from "./store.js";
 import { refreshTokens } from "./refresh.js";
 
 // ---------------------------------------------------------------------------
+// Pre-flight guard — call before any network/server work
+// ---------------------------------------------------------------------------
+
+export function requireSupabaseConfig(cfg: LevelboxConfig): void {
+  if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) {
+    throw new Error(
+      "supabase not configured — set LEVELBOX_SUPABASE_URL and LEVELBOX_SUPABASE_ANON_KEY (or pass --supabase-url / --supabase-anon-key)",
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Pure mapper — unit-testable
 // ---------------------------------------------------------------------------
 
@@ -113,7 +125,7 @@ function buildLoginPage(supabaseUrl: string, supabaseAnonKey: string): string {
     // Config injected by the CLI server
     window.__LVB = { url: ${JSON.stringify(supabaseUrl)}, anon: ${JSON.stringify(supabaseAnonKey)} };
 
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
     const supabase = createClient(window.__LVB.url, window.__LVB.anon);
 
@@ -176,6 +188,8 @@ function buildLoginPage(supabaseUrl: string, supabaseAnonKey: string): string {
 // ---------------------------------------------------------------------------
 
 export async function loginWithBrowser(cfg: LevelboxConfig): Promise<void> {
+  requireSupabaseConfig(cfg);
+
   // Lazy-import `open` so the rest of the module stays importable in test env
   const { default: open } = await import("open");
 
@@ -250,6 +264,7 @@ export async function loginWithToken(
   _accessToken: string,
   refreshToken: string,
 ): Promise<void> {
+  requireSupabaseConfig(cfg);
   const t = await refreshTokens(cfg, refreshToken); // also validates
   writeCreds({
     accessToken: t.accessToken,
