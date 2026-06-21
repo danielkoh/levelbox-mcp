@@ -1,0 +1,43 @@
+{
+  "name": "levelbox-mcp",
+  "version": "0.1.0",
+  "description": "Open-source MCP bridge for levelbox.ai — connect your AI assistant to the levelbox wheel screener.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "levelbox-mcp": "bin/levelbox-mcp.mjs"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "bin",
+    "skill",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "lint": "eslint . && prettier --check .",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1",
+    "@supabase/supabase-js": "^2",
+    "commander": "^12",
+    "open": "^10"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "eslint": "^9",
+    "prettier": "^3",
+    "tsup": "^8",
+    "typescript": "^5",
+    "typescript-eslint": "^8",
+    "vitest": "^2"
+  }
+}
