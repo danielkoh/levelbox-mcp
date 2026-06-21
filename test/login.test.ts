@@ -42,4 +42,15 @@ describe("login", () => {
       supabaseUrl: "https://s.supabase.co",
     });
   });
+
+  it("throws when a required field is missing from the callback body", () => {
+    expect(() =>
+      handleCallbackBody(
+        { baseUrl: "x", supabaseUrl: "https://s.supabase.co", supabaseAnonKey: "a" },
+        // missing refresh_token — cast to bypass TS type so we can test the runtime guard
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { access_token: "A", refresh_token: "", expires_at: 4242 } as any,
+      ),
+    ).toThrow("invalid session from login page");
+  });
 });

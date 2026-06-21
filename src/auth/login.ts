@@ -15,6 +15,15 @@ export interface CallbackBody {
 }
 
 export function handleCallbackBody(cfg: LevelboxConfig, body: CallbackBody): Creds {
+  if (
+    typeof body.access_token !== "string" ||
+    body.access_token === "" ||
+    typeof body.refresh_token !== "string" ||
+    body.refresh_token === "" ||
+    typeof body.expires_at !== "number"
+  ) {
+    throw new Error("invalid session from login page");
+  }
   return {
     accessToken: body.access_token,
     refreshToken: body.refresh_token,
@@ -192,12 +201,13 @@ export async function loginWithBrowser(cfg: LevelboxConfig): Promise<void> {
             writeCreds(handleCallbackBody(cfg, body));
             res.writeHead(200, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ ok: true }));
+            server.close();
+            resolve();
           } catch (err) {
             res.writeHead(400, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ error: String(err) }));
-          } finally {
             server.close();
-            resolve();
+            reject(err instanceof Error ? err : new Error(String(err)));
           }
         });
         return;
