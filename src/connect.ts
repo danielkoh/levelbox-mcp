@@ -33,17 +33,23 @@ export interface RemoteLike {
 // makeHandlers caches the remote across calls; on a 401-ish error it calls getRemote(true) to rebuild once.
 export function makeHandlers(getRemote: (forceRefresh?: boolean) => Promise<RemoteLike>) {
   let remotePromise: Promise<RemoteLike> = getRemote();
+
+  // Runs fn(remote); on a 401-ish error refreshes the cached remote and runs fn once more.
+  // Non-401 errors propagate immediately.
+  async function withRetry<T>(fn: (remote: RemoteLike) => Promise<T>): Promise<T> {
+    try {
+      return await fn(await remotePromise);
+    } catch (e) {
+      if (!isUnauthorized(e)) throw e;
+      remotePromise = getRemote(true);
+      return fn(await remotePromise);
+    }
+  }
+
   return {
-    listTools: async () => (await remotePromise).listTools(),
-    callTool: async (params: { name: string; arguments?: Record<string, unknown> }) => {
-      try {
-        return await (await remotePromise).callTool(params);
-      } catch (e) {
-        if (!isUnauthorized(e)) throw e;
-        remotePromise = getRemote(true);
-        return (await remotePromise).callTool(params);
-      }
-    },
+    listTools: async () => withRetry((remote) => remote.listTools()),
+    callTool: async (params: { name: string; arguments?: Record<string, unknown> }) =>
+      withRetry((remote) => remote.callTool(params)),
   };
 }
 
