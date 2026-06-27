@@ -1,6 +1,6 @@
 # levelbox-mcp
 
-Open-source MCP bridge for **levelbox.ai** — connect your AI assistant (Claude Desktop, Claude Code, etc.) to the remote levelbox wheel screener over Model Context Protocol.
+Open-source MCP bridge for **[levelbox.ai](https://levelbox.ai)** — connect your AI assistant (Claude Desktop, Claude Code, etc.) to the remote levelbox wheel screener over Model Context Protocol.
 
 This is a **client/bridge** that lets AI agents access the levelbox screener tools, not a server.
 
@@ -145,3 +145,7 @@ MIT — see LICENSE.
 ## Repository
 
 https://github.com/danielkoh/levelbox-mcp
+
+## About
+
+Built and maintained by **[levelbox.ai](https://levelbox.ai)** — the options wheel screener that helps you get paid to wait for your price. Learn more at [levelbox.ai](https://levelbox.ai).
