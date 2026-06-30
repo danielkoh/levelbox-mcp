@@ -66,15 +66,15 @@ Your assistant now has access to:
 
 - **list_themes** — Browse available screener themes (filter types, criteria)
 - **list_candidates** — View screened candidates for a theme
-- **top_candidates** — Best wheel candidates across *all* themes, deduped and ranked
+- **top_candidates** — Best wheel candidates across _all_ themes, deduped and ranked
 - **get_candidate** — Fetch details for a specific symbol
 
 **Your account** (signed in)
 
 - **watchlist_summary** — Your watchlist's projected premium, required capital, and annualized yield, scaled by your contract counts
 - **pick_symbol** / **unpick_symbol** / **list_picks** — Manage your picks/watchlist
-- **portfolio** *(Pro)* — Your imported positions with marks, plus cash, premium collected, and realized P/L
-- **covered_calls** *(Pro)* — Covered-call income suggestions on shares you own (premium, yields, assignment odds, upside cap, downside cushion)
+- **portfolio** _(Pro)_ — Your imported positions with marks, plus cash, premium collected, and realized P/L
+- **covered_calls** _(Pro)_ — Covered-call income suggestions on shares you own (premium, yields, assignment odds, upside cap, downside cushion)
 
 **Analytical use only.** These tools provide market data, valuations, and signals to inform your analysis — not investment directives. Use them to research, backtest, and understand opportunities, then make your own decisions.
 
