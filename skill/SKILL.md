@@ -49,13 +49,19 @@ Restart your assistant.
 
 Your assistant now has access to the levelbox screener:
 
+Screen:
+
 - **list_themes** — Browse screening themes
 - **list_candidates** — Get candidates for a theme
-- **top_candidates** — Top N candidates by rank
+- **top_candidates** — Best candidates across *all* themes, deduped and ranked
 - **get_candidate** — Details for a symbol
-- **pick_symbol** — Add to watchlist
-- **unpick_symbol** — Remove from watchlist
-- **list_picks** — View your picks
+
+Your account (signed in):
+
+- **watchlist_summary** — Your watchlist's projected premium, required capital, and annualized yield
+- **pick_symbol** / **unpick_symbol** / **list_picks** — Manage your picks
+- **portfolio** *(Pro)* — Your imported positions with cash, premium collected, and realized P/L
+- **covered_calls** *(Pro)* — Covered-call income suggestions on shares you own
 
 ## Important
 
